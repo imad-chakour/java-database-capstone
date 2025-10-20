@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="icon" th:href="@{/assets/images/logo/Logo.png}" type="image/png">
+    <link rel="icon" th:href="@{/assets/images/logo/logo.png}" type="image/png">
     <link rel="stylesheet" th:href="@{/assets/css/adminDashboard.css}">
     <link rel="stylesheet" th:href="@{/assets/css/style.css}">
     <script th:src="@{/js/render.js}" defer></script>
@@ -20,7 +20,7 @@
             <main class="main-content">
                 <div class="dashboard-header">
                     <h1>Admin Dashboard</h1>
-                    <button class="adminBtn" id="addDoctorBtn">Add Doctor</button>
+                    <button class="adminBtn" id="addDocBtn">Add Doctor</button>
                 </div>
                 
                 <div class="search-filter-section">
@@ -61,7 +61,8 @@
         </div>
     </div>
 
-    <script type="module" th:src="@{/js/services/adminDashboard.js}" defer></script>
+    <script type="module" th:src="@{/js/adminDashboard.js}" defer></script>
     <script type="module" th:src="@{/js/components/doctorCard.js}" defer></script>
+    <script type="module" th:src="@{/js/components/modals.js}" defer></script>
 </body>
 </html>

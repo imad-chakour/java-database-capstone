@@ -26,14 +26,14 @@ public class AppointmentService {
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final TokenService tokenService;
-    private final Service validationService;
+    private final MainService validationService;
 
     @Autowired
     public AppointmentService(AppointmentRepository appointmentRepository,
                             PatientRepository patientRepository,
                             DoctorRepository doctorRepository,
                             TokenService tokenService,
-                            Service validationService) {
+                            MainService validationService) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;

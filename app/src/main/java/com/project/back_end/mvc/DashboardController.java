@@ -45,4 +45,17 @@ public class DashboardController {
             return "redirect:/";
         }
     }
+
+    // Add patient dashboard endpoint
+    @GetMapping("/patientDashboard/{token}")
+    public String patientDashboard(@PathVariable String token) {
+        ResponseEntity<Map<String, String>> validationResponse = service.validateToken(token, "patient");
+        
+        if (validationResponse.getStatusCode().is2xxSuccessful()) {
+            return "patient/patientDashboard";
+        } else {
+            return "redirect:/";
+        }
+    }
+    
 }

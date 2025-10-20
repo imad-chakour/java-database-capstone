@@ -62,12 +62,14 @@ public class Appointment {
         this.doctor = doctor;
     }
 
-    public Doctor getDoctorId() {
-        return doctor.getId();
+    public Long getDoctorId() {
+        return doctor != null ? doctor.getId() : null;
     }
 
     public void setDoctorId(Long id) {
-        this.doctor.setId(id);
+        if (doctor != null) {
+            doctor.setId(id);
+        }
     }
 
     public Patient getPatient() {

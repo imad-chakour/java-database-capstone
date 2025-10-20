@@ -74,6 +74,7 @@ public class TokenService {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(getSigningKey())
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();
@@ -87,6 +88,7 @@ public class TokenService {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(getSigningKey())
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.get("role", String.class);
@@ -100,6 +102,7 @@ public class TokenService {
         try {
             return Jwts.parser()
                     .setSigningKey(getSigningKey())
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
@@ -135,6 +138,7 @@ public class TokenService {
         try {
             Jwts.parser()
                     .setSigningKey(getSigningKey())
+                    .build()
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {

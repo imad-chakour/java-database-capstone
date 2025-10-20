@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class Service {
+public class MainService {
 
     // 2. Constructor Injection for Dependencies
     private final TokenService tokenService;
@@ -31,7 +31,7 @@ public class Service {
     private final PatientService patientService;
 
     @Autowired
-    public Service(TokenService tokenService,
+    public MainService(TokenService tokenService,
                   AdminRepository adminRepository,
                   DoctorRepository doctorRepository,
                   PatientRepository patientRepository,

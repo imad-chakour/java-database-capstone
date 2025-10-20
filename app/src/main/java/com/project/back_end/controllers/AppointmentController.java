@@ -1,6 +1,6 @@
 package com.project.back_end.controllers;
 
-import com.project.back_end.model.Appointment;
+import com.project.back_end.models.Appointment;
 import com.project.back_end.services.AppointmentService;
 import com.project.back_end.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;

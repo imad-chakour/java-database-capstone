@@ -39,6 +39,7 @@ public class Patient {
     @Size(max = 255, message = "Address must not exceed 255 characters")
     @Column(nullable = false, length = 255)
     private String address;
+    private Boolean active;
 
     // Default constructor
     public Patient() {
@@ -141,4 +142,13 @@ public class Patient {
                phone != null && !phone.trim().isEmpty() &&
                address != null && !address.trim().isEmpty();
     }
+
+    public Boolean isActive() {
+        return active != null ? active : true;
+    }
+    
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
 }

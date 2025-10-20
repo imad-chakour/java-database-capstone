@@ -1,10 +1,10 @@
 package com.project.back_end.services;
 
 import com.project.back_end.DTO.Login;
-import com.project.back_end.model.Admin;
-import com.project.back_end.model.Appointment;
-import com.project.back_end.model.Doctor;
-import com.project.back_end.model.Patient;
+import com.project.back_end.models.Admin;
+import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Doctor;
+import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AdminRepository;
 import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
@@ -50,7 +50,7 @@ public class Service {
         Map<String, String> response = new HashMap<>();
         
         try {
-            boolean isValid = tokenService.validateToken(token, user);
+            boolean isValid = tokenService.validateToken(token);
             if (!isValid) {
                 response.put("error", "Invalid or expired token");
                 return ResponseEntity.status(401).body(response);
@@ -141,12 +141,18 @@ public class Service {
     // 6. validateAppointment Method
     public int validateAppointment(Appointment appointment) {
         try {
+            // Use getDoctorId() instead of getDoctor().getId()
+            Long doctorId = appointment.getDoctorId();
+            if (doctorId == null) {
+                return -1; // Doctor ID is null
+            }
+    
             // Check if doctor exists
-            Optional<Doctor> doctorOpt = doctorRepository.findById(appointment.getDoctor().getId());
+            Optional<Doctor> doctorOpt = doctorRepository.findById(doctorId);
             if (doctorOpt.isEmpty()) {
                 return -1; // Doctor doesn't exist
             }
-
+    
             Doctor doctor = doctorOpt.get();
             LocalDate appointmentDate = appointment.getAppointmentTime().toLocalDate();
             
@@ -172,7 +178,7 @@ public class Service {
     public boolean validatePatient(Patient patient) {
         try {
             // Check if patient already exists by email or phone
-            Patient existingPatient = patientRepository.findByEmailOrPhone(patient.getEmail(), patient.getPhone());
+            Patient existingPatient = patientRepository.findByEmail(patient.getEmail());
             return existingPatient == null; // Return true if patient doesn't exist (valid for registration)
             
         } catch (Exception e) {
@@ -303,5 +309,10 @@ public class Service {
         }
         
         return response;
+    }
+
+    // Add the missing extractEmail method that other services are calling
+    public String extractEmail(String token) {
+        return tokenService.extractEmail(token);
     }
 }

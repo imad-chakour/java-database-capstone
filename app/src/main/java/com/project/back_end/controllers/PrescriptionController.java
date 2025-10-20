@@ -1,6 +1,6 @@
 package com.project.back_end.controllers;
 
-import com.project.back_end.model.Prescription;
+import com.project.back_end.models.Prescription;
 import com.project.back_end.services.AppointmentService;
 import com.project.back_end.services.PrescriptionService;
 import com.project.back_end.services.Service;

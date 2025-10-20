@@ -64,12 +64,16 @@ public class TokenService {
                 .compact();
     }
 
-    // 5. extractEmail Method (renamed to extractIdentifier for consistency)
+    // 5. extractEmail Method (alias for extractIdentifier)
+    public String extractEmail(String token) {
+        return extractIdentifier(token);
+    }
+
+    // Extract identifier from token
     public String extractIdentifier(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
+            Claims claims = Jwts.parser()
                     .setSigningKey(getSigningKey())
-                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();
@@ -81,9 +85,8 @@ public class TokenService {
     // Additional method: Extract role from token
     public String extractRole(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
+            Claims claims = Jwts.parser()
                     .setSigningKey(getSigningKey())
-                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.get("role", String.class);
@@ -95,9 +98,8 @@ public class TokenService {
     // Additional method: Extract all claims
     public Claims extractAllClaims(String token) {
         try {
-            return Jwts.parserBuilder()
+            return Jwts.parser()
                     .setSigningKey(getSigningKey())
-                    .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
@@ -105,7 +107,7 @@ public class TokenService {
         }
     }
 
-    // 6. validateToken Method
+    // 6. validateToken Method (with user parameter)
     public boolean validateToken(String token, String user) {
         try {
             String identifier = extractIdentifier(token);
@@ -131,9 +133,8 @@ public class TokenService {
     // Additional method: Generic token validation
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
+            Jwts.parser()
                     .setSigningKey(getSigningKey())
-                    .build()
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {

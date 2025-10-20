@@ -1,9 +1,8 @@
 package com.project.back_end.services;
 
 import com.project.back_end.DTO.Login;
-import com.project.back_end.model.Appointment;
-import com.project.back_end.model.Doctor;
-import com.project.back_end.model.AvailableTime;
+import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Doctor;
 import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class DoctorService {
             List<String> availableSlots = new ArrayList<>();
 
             // Get doctor's available times
-            List<AvailableTime> availableTimes = doctor.getAvailableTimes();
+            List<String> availableTimes = doctor.getAvailableTimes();
             if (availableTimes == null || availableTimes.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -64,10 +63,14 @@ public class DoctorService {
                 .collect(Collectors.toSet());
 
             // Filter available slots
-            for (AvailableTime availableTime : availableTimes) {
-                LocalTime slotTime = availableTime.getTime();
-                if (!bookedSlots.contains(slotTime)) {
-                    availableSlots.add(slotTime.toString());
+            for (String timeSlot : availableTimes) {
+                try {
+                    LocalTime slotTime = LocalTime.parse(timeSlot);
+                    if (!bookedSlots.contains(slotTime)) {
+                        availableSlots.add(timeSlot);
+                    }
+                } catch (Exception e) {
+                    // Skip invalid time formats
                 }
             }
 
@@ -213,30 +216,34 @@ public class DoctorService {
 
     // 12. filterDoctorByTime Method (Private helper)
     private List<Doctor> filterDoctorByTime(List<Doctor> doctors, String amOrPm) {
-        if (doctors == null || doctors.isEmpty() || amOrPm == null) {
-            return doctors;
-        }
+    if (doctors == null || doctors.isEmpty() || amOrPm == null) {
+        return doctors;
+    }
 
-        return doctors.stream()
-            .filter(doctor -> {
-                List<AvailableTime> availableTimes = doctor.getAvailableTimes();
-                if (availableTimes == null || availableTimes.isEmpty()) {
-                    return false;
-                }
+    return doctors.stream()
+        .filter(doctor -> {
+            List<String> availableTimes = doctor.getAvailableTimes();
+            if (availableTimes == null || availableTimes.isEmpty()) {
+                return false;
+            }
 
-                return availableTimes.stream()
-                    .anyMatch(availableTime -> {
-                        LocalTime time = availableTime.getTime();
+            return availableTimes.stream()
+                .anyMatch(timeSlot -> {
+                    try {
+                        LocalTime time = LocalTime.parse(timeSlot);
                         if ("AM".equalsIgnoreCase(amOrPm)) {
                             return time.isBefore(LocalTime.NOON);
                         } else if ("PM".equalsIgnoreCase(amOrPm)) {
                             return !time.isBefore(LocalTime.NOON);
                         }
                         return true;
-                    });
-            })
-            .collect(Collectors.toList());
-    }
+                    } catch (Exception e) {
+                        return false;
+                    }
+                });
+        })
+        .collect(Collectors.toList());
+}
 
     // 13. filterDoctorByNameAndTime Method
     @Transactional(readOnly = true)
